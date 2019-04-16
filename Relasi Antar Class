@@ -1,0 +1,301 @@
+// Class Transaction
+using System;
+
+namespace Relasi
+{
+    public class Transaction
+    {
+        public string Invoice { get; set; }
+        public string CurrDate { get; set; }
+        // pengunaan hubungan asosiasi
+        public Dishes Dish { get; set; }
+
+        public Transaction()
+        {
+            Dish = new Dishes();
+            Invoice = "N01/2019/001";
+            CurrDate = Convert.ToDateTime(DateTime.Now).ToString("dd-MM=-yy");
+        }
+        public void Sales()
+        {
+            var sales = $"Invoice : {Invoice}; Currdate : {CurrDate}; ";
+            Console.WriteLine(sales);
+        }
+
+        public void PreSales()
+        {
+            Console.WriteLine(Dish.Info());
+        }
+
+        public void ChangeDue()
+        {
+            if (Dish == null) return;
+            Console.WriteLine(PlusPPn());
+        }
+
+        public double PlusPPn()
+        {
+            var tax = 1.1;
+            tax *= Dish.Price;
+            return tax;
+        }
+    }
+}
+
+
+// class Dishes
+using System.Collections.Generic;using System.Collections.Generic;
+
+namespace Relasi
+{
+    public class Dishes
+    {
+        private List<string> _item;
+
+        public int Code { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public double Price { get; set; }
+        public bool Status { get; set; }
+
+        public Dishes()
+        {
+            Code = 1;
+            Name = "Burger";
+            Description = " Roti Double Stack";
+            Price = 13000.0;
+            Status = true;
+
+            _item = new List<string>()
+            {
+                "001 : Burger; Roti Doubel Stack; 13000; true",
+                "002 : Pizza; pen medium; 20000; true",
+                "003 : Spageti; Bolognese Sauce; 15000; true",
+            };
+        }
+        public string Info()
+        {
+            var info = $"Code: {Code}; Name: {Name}; " +
+                            $"Description: {Description}; " +
+                            $"Price: {Price}; Status: {Status}";
+                return info;
+        }
+
+        public void Create (string item)
+        {
+            _item.Add(item);
+        }
+
+        public List<string> Read()
+        {
+            return _item;
+        }
+
+        public void Update(string item)
+        {
+            _item.Remove(item);
+            _item.Add(item);
+        }
+
+        public void Delete(string item)
+        {
+            _item.Remove(item);
+        }
+    }
+
+    public class dishes
+    {
+        public int Code
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
+        public int Name
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
+        public int Description
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
+        public int Price
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
+        public int Status
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
+        public void Info()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Create()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Update()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Raed()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}
+
+
+// Class Process
+using System.IO;
+
+namespace Relasi
+{
+    public class Process
+    {
+        private string _path;
+
+        private static Process _instance = new Process();
+
+
+        public static Process GetInstance {
+            get
+            {
+                if(_instance == null)
+                {
+                    _instance = new Process();
+                }
+                return _instance;
+            }
+        }
+
+        private Process()
+        {
+            _path = @"E:\Ngoding visual\File.txt";
+        }
+
+        public bool WriteFile(Transaction invoice)
+        {
+            try
+            {
+                File.Delete(_path);
+                string[] lines =
+                {
+                    "Invoice: " + invoice.Invoice + " ",
+                };
+
+                using (var outputFile = new StreamWriter(_path))
+                {
+                    foreach (string line in lines)
+                    {
+                        outputFile.WriteLine(line);
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool ReadFile(ref Transaction invoice)
+        {
+            try
+            {
+                if (!File.Exists(_path))
+                {
+                    return false;
+                }
+
+                var srin = File.OpenText(_path);
+                var scanout = " ";
+                var i = 0;
+
+                while ((scanout = srin.ReadLine()) != null)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            invoice.Invoice = scanout.ToString().Substring(9);
+                            break;
+                    }
+                    i++;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+
+    public class process
+    {
+        private int _path;
+
+        public int Property
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
+        public void Method()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}
+
+
+// Class Program
+using System;
+
+namespace Relasi
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var transect = new Transaction();
+           
+            Process.GetInstance.WriteFile(transect);
+            transect.Sales();
+            transect.PreSales();
+            transect.ChangeDue();
+            transect.PlusPPn();
+
+            Process.GetInstance.ReadFile(ref transect);
+
+            Console.ReadKey();
+        }
+    }
+
+    public class program
+    {
+    }
+}
